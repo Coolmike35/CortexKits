@@ -1,0 +1,5 @@
+name: CortexKits
+version: ${project.version}
+main: me.coolmike35.cortexkits.CortexKits
+api-version: 1.13
+description: A kit plugin for the Cortex Network
