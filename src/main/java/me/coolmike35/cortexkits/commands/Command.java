@@ -25,6 +25,7 @@ public class Command {
 
     public static void registerAll() {
         registerCommand(new CommandKit());
+        registerCommand(new CommandKits());
     }
 
 }

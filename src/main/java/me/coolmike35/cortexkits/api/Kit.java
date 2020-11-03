@@ -37,17 +37,13 @@ public class Kit {
 
 
     public ItemStack[] retrieve() {
-        return KitAPI.kits.get(name);
-    }
-
-
-    private String[] getAllStoredKits() {
-        List<String> array = new ArrayList<>();
-        DataManager dm = new DataManager();
-        for (File file : Objects.requireNonNull(dm.getFolder().listFiles())) {
-            array.add(file.getName().replace(".yml", ""));
-        }
-        return array.toArray(new String[0]);
+            ItemStack[] content = new ItemStack[27];
+            DataManager dm = new DataManager(name, "Kits");
+            Config kit = dm.getFile(FileType.KIT);
+            for (int i = 0; i < 27; i++) {
+                content[i] = kit.getConfig().getItemStack("Contents." + i);
+            }
+            return content;
     }
 
 
