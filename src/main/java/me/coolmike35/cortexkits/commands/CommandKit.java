@@ -35,12 +35,12 @@ public class CommandKit extends BukkitCommand {
             Kit kit = new Kit(p, args[1]);
             if (args[0].equals("create")) {
                 kit.complete();
-                p.sendMessage(ChatColor.GREEN + "Created Kit " + args[0]);
+                p.sendMessage(ChatColor.GREEN + "Created Kit " + args[1]);
                 return true;
             }
             if (args[0].equals("remove")) {
-                KitAPI.removeKit(args[0]);
-                p.sendMessage(ChatColor.GRAY + "Removed Kit " + args[0]);
+                KitAPI.removeKit(args[1]);
+                p.sendMessage(ChatColor.GRAY + "Removed Kit " + args[1]);
                 return true;
             }
             p.sendMessage(ChatColor.RED + "Unknown sub-command");
