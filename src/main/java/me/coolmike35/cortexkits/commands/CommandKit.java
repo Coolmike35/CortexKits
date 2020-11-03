@@ -19,6 +19,8 @@ public class CommandKit extends BukkitCommand {
         setDescription("Bruh");
     }
 
+    private boolean isInventoryFull(Player p) { return (p.getInventory().firstEmpty() == -1); }
+
     @Override
     public boolean execute(CommandSender commandSender, String s, String[] args) {
         Player p = (Player) commandSender;
@@ -27,6 +29,14 @@ public class CommandKit extends BukkitCommand {
         if(length == 1){
             Kit kit = new Kit(p, args[0]);
             ItemStack[] kitStack = kit.retrieve();
+            for (ItemStack item : kitStack) {
+                if (isInventoryFull(p)) {
+                    // not enough space dropping items
+                    p.getWorld().dropItemNaturally(p.getLocation(), item);
+                    break;
+                } else
+                    p.getInventory().addItem(item);
+            }
             p.getInventory().setContents(kitStack);
             return true;
         }
