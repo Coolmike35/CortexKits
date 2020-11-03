@@ -3,12 +3,16 @@ package me.coolmike35.cortexkits.commands;
 import me.coolmike35.cortexkits.api.Kit;
 import me.coolmike35.cortexkits.api.KitAPI;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class CommandKit extends BukkitCommand {
     protected CommandKit() {
@@ -19,25 +23,22 @@ public class CommandKit extends BukkitCommand {
         setDescription("Bruh");
     }
 
-    private boolean isInventoryFull(Player p) { return (p.getInventory().firstEmpty() == -1); }
+    @Override
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+        if(args.length == 1){return KitAPI.getAllKits();}
+        return new ArrayList<>();
+    }
 
     @Override
     public boolean execute(CommandSender commandSender, String s, String[] args) {
         Player p = (Player) commandSender;
         int length = args.length;
-
+        if(args.length == 0){
+            p.sendMessage(KitAPI.getAllKits().toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+            return true;
+        }
         if(length == 1){
-            Kit kit = new Kit(p, args[0]);
-            ItemStack[] kitStack = kit.retrieve();
-            for (ItemStack item : kitStack) {
-                if (isInventoryFull(p)) {
-                    // not enough space dropping items
-                    p.getWorld().dropItemNaturally(p.getLocation(), item);
-                    break;
-                } else
-                    p.getInventory().addItem(item);
-            }
-            p.getInventory().setContents(kitStack);
+            KitAPI.giveKit(p, new Kit(p, args[0]));
             return true;
         }
 

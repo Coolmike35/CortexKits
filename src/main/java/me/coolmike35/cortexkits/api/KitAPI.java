@@ -15,6 +15,8 @@ public class KitAPI {
 
     public static HashMap<UUID, ItemStack[]> player = new HashMap<>();
 
+    private static boolean isInventoryFull(Player p) { return (p.getInventory().firstEmpty() == -1); }
+
 
     public static void createKit(String name, ItemStack[] contents){
         DataManager dm = new DataManager(name);
@@ -46,4 +48,6 @@ public class KitAPI {
     public static List<String> getAllKits(){
         return new ArrayList<>(kits.keySet());
     }
+
+    public static void giveKit(Player player, Kit kit){ ItemStack[] kitStack = kit.retrieve();for (ItemStack item : kitStack) { if (item != null) { if (isInventoryFull(player)) { player.getWorld().dropItem(player.getLocation(), item); } else player.getInventory().addItem(item);} } }
 }
