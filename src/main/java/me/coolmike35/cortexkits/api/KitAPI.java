@@ -17,7 +17,7 @@ public class KitAPI {
 
 
     public static void createKit(String name, ItemStack[] contents){
-        DataManager dm = new DataManager(name, "Kits");
+        DataManager dm = new DataManager(name);
         Config main = dm.getFile(FileType.KIT);
         for (int i = 0; i < contents.length; i++) {
             main.getConfig().set("Contents." + i, contents[i]);
@@ -28,7 +28,7 @@ public class KitAPI {
 
 
     public static void removeKit(String name) {
-        DataManager dm = new DataManager(name, "Kits");
+        DataManager dm = new DataManager(name);
         Config main = dm.getFile(FileType.KIT);
         main.delete();
         kits.remove(name);

@@ -38,7 +38,7 @@ public class Kit {
 
     public ItemStack[] retrieve() {
             ItemStack[] content = new ItemStack[27];
-            DataManager dm = new DataManager(name, "Kits");
+            DataManager dm = new DataManager(name);
             Config kit = dm.getFile(FileType.KIT);
             for (int i = 0; i < 27; i++) {
                 content[i] = kit.getConfig().getItemStack("Contents." + i);
