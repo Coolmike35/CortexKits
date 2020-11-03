@@ -3,3 +3,8 @@ version: ${project.version}
 main: me.coolmike35.cortexkits.CortexKits
 api-version: 1.13
 description: A kit plugin for the Cortex Network
+commands:
+  kit:
+    usage: /kit
+    description: Main command for CortexKits plugin
+    aliases: ['/kits', '/ki', '/k']

@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 public class Command {
 
 
-    public void registerCommand(BukkitCommand command) {
+    public static void registerCommand(BukkitCommand command) {
         try {
 
             final Field commandMapField = CortexKits.getInstance().getServer().getClass().getDeclaredField("commandMap");
@@ -23,7 +23,7 @@ public class Command {
         }
     }
 
-    public void registerAll() {
+    public static void registerAll() {
         registerCommand(new CommandKit());
     }
 
