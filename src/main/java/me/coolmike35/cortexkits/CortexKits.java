@@ -20,15 +20,6 @@ public final class CortexKits extends JavaPlugin {
     public void onEnable() {
         instance = this;
         Command.registerAll();
-
-
-            DataManager dm = new DataManager();
-            for (File file : Objects.requireNonNull(dm.getFolder().listFiles())) {
-                KitAPI.kits.put(file.getName().replace(".yml", ""), new ItemStack[0]);
-            }
-
-
-
     }
 
     public void onDisable() {

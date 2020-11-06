@@ -38,15 +38,20 @@ public class CommandKit extends BukkitCommand {
             return true;
         }
         if(length == 1){
-            KitAPI.giveKit(p, new Kit(p, args[0]));
+            KitAPI.giveKit(new Kit(p, args[0].replaceAll("/*", "")));
             return true;
         }
 
         if(length == 2) {
-            Kit kit = new Kit(p, args[1]);
+            Kit kit = new Kit(p, args[1], 86400);
             if (args[0].equals("create")) {
                 kit.complete();
                 p.sendMessage(ChatColor.GREEN + "Created Kit " + args[1]);
+                return true;
+            }
+            if (args[0].equals("tmp")) {
+                kit.hold();
+                p.sendMessage(ChatColor.GREEN + "Created Temporary Kit " + args[1]);
                 return true;
             }
             if (args[0].equals("remove")) {

@@ -19,25 +19,17 @@ public class DataManager {
     public Config getFile(FileType type) {
         Config result;
         switch (type) {
-           default:
+            case KIT:
                 result = new Config(name, "Kits");
+                break;
+            case USER:
+                result = new Config(name, "Users");
+                break;
+            default:
+            result = new Config(name, "");
                 break;
         }
         return result;
-    }
-
-    public void loadDefaults() {
-        for (File file : getFolder().listFiles()) {
-            String name = file.getName().replace(".yml", "");
-            DataManager dm = new DataManager(name);
-            Config kit = dm.getFile(FileType.KIT);
-            ItemStack[] content = new ItemStack[27];
-            for (int i = 0; i < 27; i++) {
-                content[i] = kit.getConfig().getItemStack("Content." + i);
-            }
-            KitAPI.kits.put(name, content);
-            CortexKits.getInstance().getLogger().info("- All kits have been cached. Ready for use.");
-        }
     }
 
     public File getFolder() {
