@@ -18,12 +18,11 @@ public class Kit {
 
     private String name;
 
-    private int cooldown;
+    private int cooldown = 10800;
 
     public Kit(Player player, String name) {
         this.p = player;
         this.name = name;
-        this.cooldown = 0;
     }
     public Kit(Player player, String name, int cooldown) {
         this.p = player;
@@ -41,17 +40,41 @@ public class Kit {
 
     // cacheing results
     public void hold() {
-        ArrayList<ItemStack> items = new ArrayList<>(Arrays.asList(p.getInventory().getContents()));
-        KitAPI.tmpKits.put(name, items);
+        ItemStack[] contents = p.getInventory().getContents();
+        int amnt = contents.length;
+        ItemStack[] clonedContents = new ItemStack[amnt];
+        for (int i = 0; i < amnt; ++i) {
+            ItemStack item = contents[i];
+            if (item != null) {
+                clonedContents[i] = item.clone();
+            }
+        }
+        KitAPI.tmpKits.put(name, clonedContents);
         CortexKits.getInstance().getLogger().info("- Kit " + '"' + name + '"' + " has been temporarily cached.");
     }
 
     public void complete() {
+        KitAPI.createKit(name, p.getInventory().getContents());
+        CortexKits.getInstance().getLogger().info("- Kit " + '"' + name + '"' + " has been stored.");
+    }
+
+    public void completeTimed() {
         KitAPI.createKit(name, p.getInventory().getContents(), cooldown);
         CortexKits.getInstance().getLogger().info("- Kit " + '"' + name + '"' + " has been stored.");
     }
 
-    public int getCooldown(){return cooldown;}
+    public int getCooldown(){
+        DataManager dm = new DataManager(name);
+        Config main = dm.getFile(FileType.KIT);
+        return main.getConfig().getInt("Cooldown");
+    }
+
+    public void setCooldown(int cooldown) {
+        DataManager dm = new DataManager(name);
+        Config main = dm.getFile(FileType.KIT);
+        main.getConfig().set("Cooldown", cooldown);
+        main.saveConfig();
+    }
 
     public boolean hasCooldown() {return cooldown != 0;}
 
@@ -70,19 +93,16 @@ public class Kit {
 
     public ItemStack[] retrieve() {
         ItemStack[] content;
-        if (!KitAPI.tmpKits.containsKey(name)) {
             content = new ItemStack[27];
             DataManager dm = new DataManager(name);
             Config kit = dm.getFile(FileType.KIT);
             for (int i = 0; i < 27; i++) {
                 content[i] = kit.getConfig().getItemStack("Contents." + i);
             }
-        }else{
-            content = new ItemStack[];
-            for (int i = 0; i < KitAPI.tmpKits.get(name).size()/64 - 1; i++) {
-                content[i] = KitAPI.tmpKits.get(name).get(i);
-            }
-        }
         return content;
+    }
+
+    public ItemStack[] retrieveTemp() {
+        return KitAPI.tmpKits.get(name);
     }
 }

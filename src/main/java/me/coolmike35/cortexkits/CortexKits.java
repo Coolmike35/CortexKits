@@ -5,6 +5,7 @@ import me.coolmike35.cortexkits.commands.Command;
 import me.coolmike35.cortexkits.data.Config;
 import me.coolmike35.cortexkits.data.DataManager;
 import me.coolmike35.cortexkits.data.FileType;
+import me.coolmike35.cortexkits.data.SyncCooldowns;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,6 +21,8 @@ public final class CortexKits extends JavaPlugin {
     public void onEnable() {
         instance = this;
         Command.registerAll();
+        SyncCooldowns synchronize = new SyncCooldowns();
+        synchronize.runTaskTimerAsynchronously(this, 20, 20);
     }
 
     public void onDisable() {
