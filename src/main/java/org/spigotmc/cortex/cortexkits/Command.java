@@ -1,10 +1,10 @@
-package me.coolmike35.cortexkits.commands;
+package org.spigotmc.cortex.cortexkits;
 
-import me.coolmike35.cortexkits.CortexKits;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.defaults.BukkitCommand;
 
 import java.lang.reflect.Field;
+import org.spigotmc.cortex.cortexkits.commands.CommandKit;
 
 public class Command {
 
@@ -25,6 +25,11 @@ public class Command {
 
     public static void registerAll() {
         registerCommand(new CommandKit());
+    }
+
+    public static void synchronizeCooldowns(CortexKits instance) {
+        SyncCooldowns synchronize = new SyncCooldowns();
+        synchronize.runTaskTimerAsynchronously(instance, 20, 20);
     }
 
 }

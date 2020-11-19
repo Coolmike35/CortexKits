@@ -1,7 +1,7 @@
 name: CortexKits
-version: 1.0-SNAPSHOT
-main: me.coolmike35.cortexkits.CortexKits
-api-version: 1.13
+version: 1.0.0
+main: org.spigotmc.cortex.cortexkits.CortexKits
+api-version: 1.16
 depend: [ HempCore ]
 description: A kit plugin for the Cortex Network
 authors: [ Hempfest, Coolmike35 ]

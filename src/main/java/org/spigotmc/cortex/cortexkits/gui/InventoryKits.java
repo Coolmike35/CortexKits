@@ -1,24 +1,20 @@
-package me.coolmike35.cortexkits.gui;
+package org.spigotmc.cortex.cortexkits.gui;
 
-import com.youtube.hempfest.hempcore.hempcore.HempCore;
-import com.youtube.hempfest.hempcore.hempcore.formatting.string.ColoredString;
-import com.youtube.hempfest.hempcore.hempcore.gui.GuiLibrary;
-import com.youtube.hempfest.hempcore.hempcore.gui.Pagination;
-import me.coolmike35.cortexkits.api.Kit;
-import me.coolmike35.cortexkits.api.KitAPI;
-import me.coolmike35.cortexkits.data.Config;
-import me.coolmike35.cortexkits.data.DataManager;
-import me.coolmike35.cortexkits.data.FileType;
+import com.youtube.hempfest.hempcore.HempCore;
+import com.youtube.hempfest.hempcore.formatting.string.ColoredString;
+import com.youtube.hempfest.hempcore.gui.GuiLibrary;
+import com.youtube.hempfest.hempcore.gui.Pagination;
+import java.util.ArrayList;
+import org.spigotmc.cortex.cortexkits.utility.api.Kit;
+import org.spigotmc.cortex.cortexkits.utility.api.KitAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-
-import java.util.ArrayList;
+import org.spigotmc.cortex.cortexkits.utility.data.DataManager;
 
 public class InventoryKits extends Pagination {
 
@@ -28,7 +24,7 @@ public class InventoryKits extends Pagination {
 
     @Override
     public String getMenuName() {
-        return new ColoredString("&7[&3&lCortex&7] &e&oAll kits", ColoredString.ColorType.MC).toString();
+        return new ColoredString(DataManager.getPrefix() + " &e&oAll kits", ColoredString.ColorType.MC).toString();
     }
 
     @Override

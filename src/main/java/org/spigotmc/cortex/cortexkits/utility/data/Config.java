@@ -1,6 +1,6 @@
-package me.coolmike35.cortexkits.data;
+package org.spigotmc.cortex.cortexkits.utility.data;
 
-import me.coolmike35.cortexkits.CortexKits;
+import org.spigotmc.cortex.cortexkits.CortexKits;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 

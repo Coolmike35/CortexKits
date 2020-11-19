@@ -1,16 +1,17 @@
-package me.coolmike35.cortexkits.api;
-
-import me.coolmike35.cortexkits.data.Config;
-import me.coolmike35.cortexkits.data.DataManager;
-import me.coolmike35.cortexkits.data.FileType;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+package org.spigotmc.cortex.cortexkits.utility.api;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.spigotmc.cortex.cortexkits.utility.data.Config;
+import org.spigotmc.cortex.cortexkits.utility.data.DataManager;
 
 public class KitAPI {
     public static Map<String, ItemStack[]> tmpKits = new HashMap<>();
@@ -19,7 +20,7 @@ public class KitAPI {
 
     public static void createKit(String name, ItemStack[] contents, int cooldown){
         DataManager dm = new DataManager(name);
-        Config main = dm.getFile(FileType.KIT);
+        Config main = dm.getFile(DataManager.FileType.KIT);
         main.getConfig().set("Cooldown", cooldown);
         for (int i = 0; i < contents.length; i++) {
             main.getConfig().set("Contents." + i, contents[i]);
@@ -29,7 +30,7 @@ public class KitAPI {
     }
     public static void createKit(String name, ItemStack[] contents){
         DataManager dm = new DataManager(name);
-        Config main = dm.getFile(FileType.KIT);
+        Config main = dm.getFile(DataManager.FileType.KIT);
         main.getConfig().set("Cooldown", 0);
         for (int i = 0; i < contents.length; i++) {
             main.getConfig().set("Contents." + i, contents[i]);
@@ -40,7 +41,7 @@ public class KitAPI {
 
     public static void removeKit(String name) {
         DataManager dm = new DataManager(name);
-        Config main = dm.getFile(FileType.KIT);
+        Config main = dm.getFile(DataManager.FileType.KIT);
         if (main.exists())
         main.delete();
         tmpKits.remove(name.replaceAll("\\*", ""));
@@ -86,7 +87,7 @@ public class KitAPI {
     public static boolean kitAvailable(Player p, Kit kit) {
         boolean result = false;
         DataManager dm = new DataManager(p.getUniqueId().toString());
-        Config user = dm.getFile(FileType.USER);
+        Config user = dm.getFile(DataManager.FileType.USER);
         boolean cooldownActive = user.getConfig().contains(kit.getName() + ".Cooldown");
         if (cooldownActive) {
             Long a = user.getConfig().getLong(kit.getName() + ".Cooldown");
@@ -127,7 +128,7 @@ public class KitAPI {
                 }
                 //Logs date that kit was given to the player
                 DataManager dm = new DataManager(player.getUniqueId().toString());
-                Config playerFile = dm.getFile(FileType.USER);
+                Config playerFile = dm.getFile(DataManager.FileType.USER);
                 Date date = new Date();   // given date
                 playerFile.getConfig().set(kit.getName() + ".LastTimeGiven", date.toString());
                 playerFile.saveConfig();

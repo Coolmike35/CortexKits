@@ -1,28 +1,35 @@
-package me.coolmike35.cortexkits.data;
+package org.spigotmc.cortex.cortexkits.utility.data;
 
-import com.youtube.hempfest.hempcore.hempcore.formatting.string.ColoredString;
-import me.coolmike35.cortexkits.CortexKits;
-import me.coolmike35.cortexkits.api.KitAPI;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
+import com.youtube.hempfest.hempcore.formatting.string.ColoredString;
 import java.io.File;
+import java.io.InputStream;
 import java.util.Objects;
 import java.util.UUID;
+import org.spigotmc.cortex.cortexkits.CortexKits;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class DataManager {
 
-    String name;
+    private String name;
+    private String directory;
 
-    public DataManager(){};
+
+    public DataManager(){}
     public DataManager(String name) {
         this.name = name;
     }
+    public DataManager(String name, String directory) {
+        this.name = name;
+        this.directory = directory;
+    }
 
+    public enum FileType {
+        KIT, USER, MISC
+    }
 
     public Config getFile(FileType type) {
-        Config result;
+        Config result = null;
         switch (type) {
             case KIT:
                 result = new Config(name, "Kits");
@@ -30,8 +37,8 @@ public class DataManager {
             case USER:
                 result = new Config(name, "Users");
                 break;
-            default:
-            result = new Config(name, "");
+            case MISC:
+                result = new Config(name, directory);
                 break;
         }
         return result;
@@ -41,8 +48,22 @@ public class DataManager {
         KITS, USERS
     }
 
-    private void msg(Player p, String text) {
-        p.sendMessage(new ColoredString("&7[&3&lCortex&7] &r" + text, ColoredString.ColorType.HEX).toString());
+    private static final DataManager dm = new DataManager("Config", "Configuration");
+    private static final Config main = dm.getFile(DataManager.FileType.MISC);
+
+    public static String getPrefix() {
+        return main.getConfig().getString("Prefix");
+    }
+
+    public static void msg(Player p, String text) {
+        p.sendMessage(new ColoredString(getPrefix() + "&r " + text, ColoredString.ColorType.HEX).toString());
+    }
+
+    public static void copyDefault() {
+        if (!main.exists()) {
+            InputStream io = CortexKits.getInstance().getResource("Config.yml");
+            Config.copy(io, main.getFile());
+        }
     }
 
     public void checkCooldowns() {
