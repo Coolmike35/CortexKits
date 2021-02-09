@@ -1,7 +1,7 @@
 name: CortexKits
-version: 1.0.0
+version: 1.0.3
 main: org.spigotmc.cortex.cortexkits.CortexKits
-api-version: 1.16
-depend: [ HempCore ]
+api-version: 1.13
+depend: [ Labyrinth ]
 description: A kit plugin for the Cortex Network
 authors: [ Hempfest, Coolmike35 ]

@@ -22,6 +22,7 @@ public class KitAPI {
         DataManager dm = new DataManager(name);
         Config main = dm.getFile(DataManager.FileType.KIT);
         main.getConfig().set("Cooldown", cooldown);
+        main.getConfig().set("Category", "Misc");
         for (int i = 0; i < contents.length; i++) {
             main.getConfig().set("Contents." + i, contents[i]);
         }
@@ -32,6 +33,7 @@ public class KitAPI {
         DataManager dm = new DataManager(name);
         Config main = dm.getFile(DataManager.FileType.KIT);
         main.getConfig().set("Cooldown", 0);
+        main.getConfig().set("Category", "Misc");
         for (int i = 0; i < contents.length; i++) {
             main.getConfig().set("Contents." + i, contents[i]);
         }
@@ -45,6 +47,12 @@ public class KitAPI {
         if (main.exists())
         main.delete();
         tmpKits.remove(name.replaceAll("\\*", ""));
+    }
+
+    public static String getCategory(String name) {
+        DataManager dm = new DataManager(name);
+        Config main = dm.getFile(DataManager.FileType.KIT);
+       return main.getConfig().getString("Category");
     }
 
     public boolean kitExists(String name) { return getAllKits().contains(name);}

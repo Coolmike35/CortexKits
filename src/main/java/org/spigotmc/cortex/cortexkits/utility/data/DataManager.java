@@ -1,6 +1,6 @@
 package org.spigotmc.cortex.cortexkits.utility.data;
 
-import com.youtube.hempfest.hempcore.formatting.string.ColoredString;
+import com.github.sanctum.labyrinth.formatting.string.ColoredString;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Objects;
@@ -32,13 +32,13 @@ public class DataManager {
         Config result = null;
         switch (type) {
             case KIT:
-                result = new Config(name, "Kits");
+                result = Config.get(name, "Kits");
                 break;
             case USER:
-                result = new Config(name, "Users");
+                result = Config.get(name, "Users");
                 break;
             case MISC:
-                result = new Config(name, directory);
+                result = Config.get(name, directory);
                 break;
         }
         return result;
@@ -69,7 +69,7 @@ public class DataManager {
     public void checkCooldowns() {
         for (File player : Objects.requireNonNull(getFolder(FolderType.USERS).listFiles())) {
             String name = player.getName().replace(".yml", "");
-            Config user = new Config(name, "Users");
+            Config user = Config.get(name, "Users");
             for (String kit : user.getConfig().getKeys(false)) {
                 if (user.getConfig().getLong(kit + ".Cooldown") < System.currentTimeMillis()) {
                     user.getConfig().set(kit, null);

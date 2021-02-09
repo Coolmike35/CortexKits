@@ -1,5 +1,6 @@
 package org.spigotmc.cortex.cortexkits.utility.data;
 
+import java.util.Objects;
 import org.spigotmc.cortex.cortexkits.CortexKits;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -8,24 +9,17 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Config {
     private final String n;
     private final String d;
     private FileConfiguration fc;
     private File file;
-    private final CortexKits plugin;
-    private static List<Config> configs;
-
-    static {
-        Config.configs = new ArrayList<Config>();
-    }
+    private static final List<Config> configs = new ArrayList<>();
 
     public Config(final String n, final String d) {
-        this.plugin = CortexKits.getInstance();
         this.n = n;
         this.d = d;
-        Config.configs.add(this);
+        configs.add(this);
     }
 
     public static void copy(InputStream in, File file) {
@@ -44,41 +38,38 @@ public class Config {
     }
 
     public String getName() {
-        if(this.n == null) {
-            try {
-                throw new Exception();
-            }catch(final Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return this.n;
+        return (n == null) ? "" : n;
     }
 
+    public String getDescription() {
+        return (d == null) ? "" : d;
+    }
 
-    public static Config getConfig(final String n, final String d) {
-        for(final Config c: Config.configs) {
-            if(c.getName().equals(n)) {
+    public static Config get(final String n, final String d) {
+        for (final Config c : Config.configs) {
+            if (c.getName().equals(n) && c.getDescription().equals(d)) {
                 return c;
             }
         }
-        if (d != null) {
-
+        if (n != null && !n.isEmpty()) {
             return new Config(n, d);
-        } else
-        return new Config(n, null);
+        }
+        return null;
     }
 
     public boolean delete() {
+        Config.configs.removeIf(c -> c.equals(this));
         return this.getFile().delete();
     }
 
     public boolean exists() {
-        if(this.fc == null || this.file == null) {
+        if (this.file == null) {
             final File temp = new File(this.getDataFolder(), this.getName() + ".yml");
-            if(!temp.exists()) {
+            if (!temp.exists()) {
                 return false;
+            } else {
+                this.file = temp;
             }
-            this.file = temp;
         }
         return true;
     }
@@ -106,50 +97,55 @@ public class Config {
 
     public File getDataFolder() {
         final File dir = new File(Config.class.getProtectionDomain().getCodeSource().getLocation().getPath().replaceAll("%20", " "));
-        File d = null;
+        File d;
         if (this.d != null) {
             d = new File(dir.getParentFile().getPath(), CortexKits.getInstance().getName() + "/" + this.d + "/");
         } else {
             d = new File(dir.getParentFile().getPath(), CortexKits.getInstance().getName());
         }
-        if(!d.exists()) {
+        if (!d.exists()) {
             d.mkdirs();
         }
         return d;
     }
 
     public void reload() {
-        if(this.file == null) {
-            this.file = new File(this.getDataFolder(), this.getName() + ".yml");
-            if(!this.file.exists()) {
-                try {
-                    this.file.createNewFile();
-                }catch(final IOException e) {
-                    e.printStackTrace();
-                }
+        this.file = new File(getDataFolder(), getName() + ".yml");
+        if (!this.file.exists())
+            try {
+                this.file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-            this.fc = YamlConfiguration.loadConfiguration(this.file);
-            final File defConfigStream = new File(this.plugin.getDataFolder(), this.getName() + ".yml");
-            if(defConfigStream != null) {
-                final YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-                this.fc.setDefaults(defConfig);
-            }
-        }
+        this.fc = YamlConfiguration.loadConfiguration(this.file);
+        File defConfigStream = new File(getDataFolder(), getName() + ".yml");
+        YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+        this.fc.setDefaults(defConfig);
+        configs.removeIf(c -> c.getName().equals(n));
     }
 
     public void saveConfig() {
         try {
             this.getConfig().save(this.getFile());
-        }catch(final IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Config)) return false;
+        Config config = (Config) o;
+        return n.equals(config.n) &&
+                d.equals(config.d) &&
+                Objects.equals(fc, config.fc) &&
+                Objects.equals(getFile(), config.getFile());
+    }
 
-
-
-
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(n, d);
+    }
 }
 

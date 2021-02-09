@@ -1,21 +1,20 @@
 package org.spigotmc.cortex.cortexkits.commands;
 
-import com.youtube.hempfest.hempcore.HempCore;
-import com.youtube.hempfest.hempcore.formatting.string.ColoredString;
+import com.github.sanctum.labyrinth.Labyrinth;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.spigotmc.cortex.cortexkits.utility.api.Kit;
-import org.spigotmc.cortex.cortexkits.utility.api.KitAPI;
-import org.spigotmc.cortex.cortexkits.utility.data.Config;
-import org.spigotmc.cortex.cortexkits.utility.data.DataManager;
-import org.spigotmc.cortex.cortexkits.gui.InventoryKits;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
+import org.spigotmc.cortex.cortexkits.gui.InventoryCategory;
+import org.spigotmc.cortex.cortexkits.utility.api.Kit;
+import org.spigotmc.cortex.cortexkits.utility.api.KitAPI;
+import org.spigotmc.cortex.cortexkits.utility.data.Config;
+import org.spigotmc.cortex.cortexkits.utility.data.DataManager;
 
 public class CommandKit extends BukkitCommand {
 
@@ -129,7 +128,7 @@ public class CommandKit extends BukkitCommand {
         Player p = (Player) commandSender;
         int length = args.length;
         if(args.length == 0) {
-            new InventoryKits(HempCore.guiManager(p)).open();
+            new InventoryCategory(Labyrinth.guiManager(p)).open();
             return true;
         }
         if(length == 1) {
@@ -258,6 +257,14 @@ public class CommandKit extends BukkitCommand {
                 DataManager.msg(p, "&#ed2d2dInvalid usage: &#de9012integer value required. Ex. (" + '"' + "140" + '"' + ")");
                 return true;
             }
+            if (args[0].equalsIgnoreCase("category")) {
+                if (!p.hasPermission(this.getPermission() + ".modify")) {
+                    DataManager.msg(p, "&#ed2d2dIncorrect permission: &#de9012You are not allowed access to this command.");
+                    return true;
+                }
+                DataManager.msg(p, "&#ed2d2dInvalid usage: &#de9012category value required. Ex. (" + '"' + "Ranks" + '"' + ")");
+                return true;
+            }
             if (args[0].equalsIgnoreCase("give")) {
                 if (!p.hasPermission(this.getPermission() + ".give")) {
                     DataManager.msg(p, "&#ed2d2dIncorrect permission: &#de9012You are not allowed access to this command.");
@@ -316,8 +323,8 @@ public class CommandKit extends BukkitCommand {
                 DataManager.msg(p, "&#12deb8&oKit &f" + '"' + "&#de9012" + args[2] + "&f" + '"' + " &#12deb8&owas given to &f" + '"' + "&#de9012" + target.getName() + "&f" +'"');
                 return true;
             }
-            Kit kit = new Kit(p, args[1], Integer.parseInt(args[2]));
             if (args[0].equals("create")) {
+                Kit kit = new Kit(p, args[1], Integer.parseInt(args[2]));
                 if (!p.hasPermission(this.getPermission() + ".create")) {
                     DataManager.msg(p, "&#ed2d2dIncorrect permission: &#de9012You are not allowed access to this command.");
                     return true;
@@ -341,12 +348,30 @@ public class CommandKit extends BukkitCommand {
             }
 
             if (args[0].equals("timer")) {
+                Kit kit = new Kit(p, args[1]);
                 if (!p.hasPermission(this.getPermission() + ".modify")) {
                     DataManager.msg(p, "&#ed2d2dIncorrect permission: &#de9012You are not allowed access to this command.");
                     return true;
                 }
-                kit.setCooldown(Integer.parseInt(args[2]));
-                DataManager.msg(p, "&#12deb8&oKit &f" + '"' + "&#de9012" + args[1] + "&f" + '"' + " &#12deb8&ocooldown has been updated to : " + KitAPI.formatTime(args[2]));
+                try {
+                    int testing = Integer.parseInt(args[2]);
+                    kit.setCooldown(testing);
+                    DataManager.msg(p, "&#12deb8&oKit &f" + '"' + "&#de9012" + args[1] + "&f" + '"' + " &#12deb8&ocooldown has been updated to : " + KitAPI.formatTime(args[2]));
+                } catch (NumberFormatException e) {
+                    DataManager.msg(p, "&#ed2d2dInvalid cooldown time.");
+                    return true;
+                }
+                return true;
+            }
+
+            if (args[0].equals("category")) {
+                Kit kit = new Kit(p, args[1]);
+                if (!p.hasPermission(this.getPermission() + ".modify")) {
+                    DataManager.msg(p, "&#ed2d2dIncorrect permission: &#de9012You are not allowed access to this command.");
+                    return true;
+                }
+                kit.setCategory(args[2]);
+                DataManager.msg(p, "&#12deb8&oKit &f" + '"' + "&#de9012" + args[1] + "&f" + '"' + " &#12deb8&ocategory has been changed to : " + args[2]);
                 return true;
             }
 

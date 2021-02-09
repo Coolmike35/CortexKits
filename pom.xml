@@ -6,7 +6,7 @@
 
     <groupId>org.spigotmc.cortex</groupId>
     <artifactId>CortexKits</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
 
     <name>CortexKits</name>
@@ -77,9 +77,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.youtube.hempfest.hempcore</groupId>
-            <artifactId>HempCore</artifactId>
-            <version>1.0.0</version>
+            <groupId>com.github.the-h-team</groupId>
+            <artifactId>Labyrinth</artifactId>
+            <version>1.2.2</version>
         </dependency>
     </dependencies>
 </project>

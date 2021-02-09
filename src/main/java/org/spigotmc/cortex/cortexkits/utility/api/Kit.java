@@ -74,6 +74,13 @@ public class Kit {
         main.saveConfig();
     }
 
+    public void setCategory(String category) {
+        DataManager dm = new DataManager(name);
+        Config main = dm.getFile(DataManager.FileType.KIT);
+        main.getConfig().set("Category", category);
+        main.saveConfig();
+    }
+
     public boolean hasCooldown() {return cooldown != 0;}
 
     public boolean hasUsedKit() {
@@ -91,10 +98,10 @@ public class Kit {
 
     public ItemStack[] retrieve() {
         ItemStack[] content;
-            content = new ItemStack[27];
+            content = new ItemStack[36];
             DataManager dm = new DataManager(name);
             Config kit = dm.getFile(DataManager.FileType.KIT);
-            for (int i = 0; i < 27; i++) {
+            for (int i = 0; i < 36; i++) {
                 content[i] = kit.getConfig().getItemStack("Contents." + i);
             }
         return content;
